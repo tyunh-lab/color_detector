@@ -89,9 +89,9 @@ def blue(cap, withGUI=False):
             # 画像の中心を表示
             frame = cv2.circle(frame,(int(frame.shape[1]/2),int(frame.shape[0]/2)),5,(0,0,255),-1)
             # GUIに表示
-            cv2.imshow("Camera", frame)
+            # cv2.imshow("Camera", frame)
             #マスク画像を表示
-            # cv2.imshow("Mask", blue_mask)
+            cv2.imshow("Mask", blue_mask)
 
         # qキーが押されたら途中終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -152,9 +152,9 @@ def yellow(cap, withGUI=False):
             # 画像の中心を表示
             frame = cv2.circle(frame,(int(frame.shape[1]/2),int(frame.shape[0]/2)),5,(0,0,255),-1)
             # GUIに表示
-            cv2.imshow("Camera", frame)
+            # cv2.imshow("Camera", frame)
             #マスク画像を表示
-            # cv2.imshow("Mask", yellow_mask)
+            cv2.imshow("Mask", yellow_mask)
 
         # qキーが押されたら途中終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
