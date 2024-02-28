@@ -127,13 +127,3 @@ def yellow_goal_ditect(cap, withGUI=False):
     # 終了処理
     cap.release()
     cv2.destroyAllWindows()
-
-
-def main():
-    cap = cv2.VideoCapture("video/blue_goal.mp4")
-    blue_goal_ditect(cap, withGUI=True)
-    cap = cv2.VideoCapture("video/yellow_goal.mp4")
-    yellow_goal_ditect(cap, withGUI=True)
-
-if __name__ == "__main__":
-    main()

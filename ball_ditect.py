@@ -83,11 +83,3 @@ def color_ditect(cap, withGUI=False):
     # 終了処理
     cap.release()
     cv2.destroyAllWindows()
-
-
-def main():
-    cap = cv2.VideoCapture("video/ball.mp4")
-    color_ditect(cap, withGUI=True)
-
-if __name__ == "__main__":
-    main()
