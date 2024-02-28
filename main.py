@@ -1,21 +1,33 @@
-import time
 import cv2
 
-from ball_ditect import color_ditect
-from goal_ditect import blue_goal_ditect, yellow_goal_ditect
+import json
+from ditector.ball_ditect import ball
+from ditector.goal_ditect import blue, yellow
+from ditector.all_ditector import all_ditect
+
+def setup_json(data_to_write = {'status': 'none', 'now_task': 'none'}):
+    print(data_to_write)
+    with open('data.json', 'w') as f:
+        json.dump(data_to_write, f)
+
 
 def main():
-    start = time.time()
-    cap = cv2.VideoCapture("video/ball.mp4")
-    color_ditect(cap)
-    print("time: ", time.time() - start)
-    cap = cv2.VideoCapture("video/blue_goal.mp4")
-    blue_goal_ditect(cap)
-    print("time: ", time.time() - start)
-    cap = cv2.VideoCapture("video/yellow_goal.mp4")
-    yellow_goal_ditect(cap)
-    print("time: ", time.time() - start)
+    setup_json()
 
+    setup_json({'status': '', 'now_task': 'ball_ditect'})
+    cap = cv2.VideoCapture("video/ball.mp4")
+    ball(cap, withGUI=True)
+
+    setup_json({'status': '', 'now_task': 'blue_goal_ditect'})
+    cap = cv2.VideoCapture("video/blue_goal.mp4")
+    blue(cap, withGUI=True)
+
+    setup_json({'status': '', 'now_task': 'yellow_goal_ditect'})
+    cap = cv2.VideoCapture("video/yellow_goal.mp4")
+    yellow(cap, withGUI=True)
+
+    cap = cv2.VideoCapture("video/ball_and_goal.mp4")
+    all_ditect(cap, withGUI=True)
 
 if __name__ == "__main__":
     main()
