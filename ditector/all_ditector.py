@@ -1,27 +1,29 @@
 import cv2
-import numpy as np
+import time
 from ditector.ball_ditect import ball_ditect
 from ditector.goal_ditect import blue_goal_ditect, yellow_goal_ditect
 
 def all_ditect(cap, withGUI=False):
+    frame_length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    start = time.time()
     while (cap.isOpened()):
     # 1フレーム毎　読込み
-        ret, frame = cap.read()
+        _, frame = cap.read()
 
         # フレームがない場合終了
         if (frame is None):
             break
 
         # ブラー処理
-        frame = cv2.GaussianBlur(frame, (43, 43), 0) # <-奇数にしないといけない、値を大きくすると重くなる
+        blured_frame = cv2.GaussianBlur(frame, (43, 43), 0) # <-奇数にしないといけない、値を大きくすると重くなる
 
         # 画像をHSVに変換
-        hsv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        hsv_image = cv2.cvtColor(blured_frame, cv2.COLOR_BGR2HSV)
 
         # ボールの検出
-        ball_contours = ball_ditect(frame,hsv_image)
-        blue_goal_contours = blue_goal_ditect(frame,hsv_image)
-        yellow_goal_contours = yellow_goal_ditect(frame,hsv_image)
+        ball_contours = ball_ditect(blured_frame,hsv_image)
+        blue_goal_contours = blue_goal_ditect(blured_frame,hsv_image)
+        yellow_goal_contours = yellow_goal_ditect(blured_frame,hsv_image)
 
         #小さいのはノイズとして削除
         ball_contours = [cnt for cnt in ball_contours if cv2.contourArea(cnt) > 300]
@@ -80,6 +82,10 @@ def all_ditect(cap, withGUI=False):
         # qキーが押されたら途中終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+    print("elapsed_time:{0}".format(time.time() - start) + "[sec]")
+    print("frame_length:{0}".format(frame_length))
+    print("fps:{0}".format(frame_length / (time.time() - start)))
 
     # 終了処理
     cap.release()
