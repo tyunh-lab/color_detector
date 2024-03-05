@@ -3,6 +3,8 @@ import time
 from ditector.ball_ditect import ball_ditect
 from ditector.goal_ditect import blue_goal_ditect, yellow_goal_ditect
 
+from ditector.enemy import enemy_ditect
+
 def all_ditect(cap, withGUI=False):
     frame_length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     start = time.time()
@@ -30,6 +32,8 @@ def all_ditect(cap, withGUI=False):
         blue_goal_contours = [cnt for cnt in blue_goal_contours if cv2.contourArea(cnt) > 1000]
         yellow_goal_contours = [cnt for cnt in yellow_goal_contours if cv2.contourArea(cnt) > 1000]
         
+        #for debug
+        enemy_ditect(frame, hsv_image)
         # ボールの検出
         for i in range(len(ball_contours)):
             (x,y), radius = cv2.minEnclosingCircle(ball_contours[i])
@@ -50,11 +54,18 @@ def all_ditect(cap, withGUI=False):
         # ゴールの検出
         for i in range(len(blue_goal_contours)):
             x,y,w,h = cv2.boundingRect(blue_goal_contours[i])
+            print("width", w, "height", h,"aspect ratio", w/h)
             center = (int(x + w/2), int(y + h/2))
+            aspect_ratio = w/h
+
+            if(aspect_ratio < 4):
+                print("enemy is detected")
 
             if withGUI:
                 # ゴールの枠を表示
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                # アスペクト比を表示
+                frame = cv2.putText(frame, f"{aspect_ratio:.2f}", (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                 # ゴールの中心を表示
                 frame = cv2.circle(frame,center,5,(0,0,255),-1)
                 # 中心から線を表示
@@ -63,11 +74,18 @@ def all_ditect(cap, withGUI=False):
         # ゴールの検出
         for i in range(len(yellow_goal_contours)):
             x,y,w,h = cv2.boundingRect(yellow_goal_contours[i])
+            print("width", w, "height", h,"aspect ratio", w/h)
             center = (int(x + w/2), int(y + h/2))
+            aspect_ratio = w/h
+
+            if(aspect_ratio < 5 or aspect_ratio > 7):
+                print("enemy is detected")
 
             if withGUI:
                 # ゴールの枠を表示
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                # アスペクト比を表示
+                frame = cv2.putText(frame, f"{aspect_ratio:.2f}", (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
                 # ゴールの中心を表示
                 frame = cv2.circle(frame,center,5,(0,0,255),-1)
                 # 中心から線を表示
