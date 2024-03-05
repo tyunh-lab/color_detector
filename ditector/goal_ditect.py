@@ -3,7 +3,10 @@ import numpy as np
 
 def blue_goal_ditect(frame,hsv_image):
     # 青色のHSV範囲を指定
-    lower_blue = np.array([100, 100, 80])  # 下限値
+    # lower_blue = np.array([100, 100, 80])  # 下限値
+    # upper_blue = np.array([200, 255, 255])  # 上限値
+    
+    lower_blue = np.array([100, 80, 60])  # 下限値
     upper_blue = np.array([200, 255, 255])  # 上限値
 
     # 指定した範囲内のピクセルを抽出
@@ -53,7 +56,10 @@ def blue(cap, withGUI=False):
         hsv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         # 青色のHSV範囲を指定
-        lower_blue = np.array([100, 100, 80])  # 下限値
+        # lower_blue = np.array([100, 100, 80])  # 下限値
+        # upper_blue = np.array([200, 255, 255])  # 上限値
+        
+        lower_blue = np.array([100, 80, 60])  # 下限値
         upper_blue = np.array([200, 255, 255])  # 上限値
 
         # 指定した範囲内のピクセルを抽出
@@ -72,15 +78,19 @@ def blue(cap, withGUI=False):
         for contour in contours:
             # 輪郭を囲む長方形を取得
             x, y, w, h = cv2.boundingRect(contour)
-
             center = (int(x + w/2), int(y + h/2))
             # print("x: ", f"{center[0]:.2f}", "y: ", f"{center[1]:.2f}")
+
+            if (len(contours) >= 2):
+                print("enemy is detected")
 
             if withGUI:
                 # ゴールの枠を表示
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 # ゴールの中心を表示
                 frame = cv2.circle(frame,center,5,(0,0,255),-1)
+                #　中心から正面への線を表示
+                frame = cv2.line(frame, (int(frame.shape[1]/2),int(frame.shape[0])), (int(frame.shape[1]/2),0), (255,255,0),2)
                 # 中心から線を表示
                 frame = cv2.line(frame, (int(frame.shape[1]/2),int(frame.shape[0]/2)), center, (255,0,0), 2)
 
@@ -89,9 +99,9 @@ def blue(cap, withGUI=False):
             # 画像の中心を表示
             frame = cv2.circle(frame,(int(frame.shape[1]/2),int(frame.shape[0]/2)),5,(0,0,255),-1)
             # GUIに表示
-            # cv2.imshow("Camera", frame)
+            cv2.imshow("Camera", frame)
             #マスク画像を表示
-            cv2.imshow("Mask", blue_mask)
+            # cv2.imshow("Mask", blue_mask)
 
         # qキーが押されたら途中終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
