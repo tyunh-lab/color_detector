@@ -77,20 +77,21 @@ def blue(cap, withGUI=False):
         # 各輪郭に対して処理
         for contour in contours:
             # 輪郭を囲む長方形を取得
-            x, y, w, h = cv2.boundingRect(contour)
-            center = (int(x + w/2), int(y + h/2))
-            # print("x: ", f"{center[0]:.2f}", "y: ", f"{center[1]:.2f}")
+            # x, y, w, h = cv2.boundingRect(contour)
 
-            if (len(contours) >= 2):
-                print("enemy is detected")
+            #####改良版#####
+            rect = cv2.minAreaRect(contour)
+            box = cv2.boxPoints(rect)
+            box = np.int0(box)
+
+            center = (int(rect[0][0]), int(rect[0][1]))
 
             if withGUI:
                 # ゴールの枠を表示
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                # cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 2)
+                frame = cv2.drawContours(frame,[box],0,(0,255,255),2) #<-改良版
                 # ゴールの中心を表示
                 frame = cv2.circle(frame,center,5,(0,0,255),-1)
-                #　中心から正面への線を表示
-                frame = cv2.line(frame, (int(frame.shape[1]/2),int(frame.shape[0])), (int(frame.shape[1]/2),0), (255,255,0),2)
                 # 中心から線を表示
                 frame = cv2.line(frame, (int(frame.shape[1]/2),int(frame.shape[0]/2)), center, (255,0,0), 2)
 
@@ -145,14 +146,19 @@ def yellow(cap, withGUI=False):
         # 各輪郭に対して処理
         for contour in contours:
             # 輪郭を囲む長方形を取得
-            x, y, w, h = cv2.boundingRect(contour)
+            # x, y, w, h = cv2.boundingRect(contour)
 
-            center = (int(x + w/2), int(y + h/2))
-            # print("x: ", f"{center[0]:.2f}", "y: ", f"{center[1]:.2f}")
+            #####改良版#####
+            rect = cv2.minAreaRect(contour)
+            box = cv2.boxPoints(rect)
+            box = np.int0(box)
+
+            center = (int(rect[0][0]), int(rect[0][1]))
 
             if withGUI:
                 # ゴールの枠を表示
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (  0, 255, 255), 2)    
+                # cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 2)
+                frame = cv2.drawContours(frame,[box],0,(0,255,255),2) #<-改良版
                 # ゴールの中心を表示
                 frame = cv2.circle(frame,center,5,(0,0,255),-1)
                 # 中心から線を表示
@@ -162,9 +168,9 @@ def yellow(cap, withGUI=False):
             # 画像の中心を表示
             frame = cv2.circle(frame,(int(frame.shape[1]/2),int(frame.shape[0]/2)),5,(0,0,255),-1)
             # GUIに表示
-            # cv2.imshow("Camera", frame)
+            cv2.imshow("Camera", frame)
             #マスク画像を表示
-            cv2.imshow("Mask", yellow_mask)
+            # cv2.imshow("Mask", yellow_mask)
 
         # qキーが押されたら途中終了
         if cv2.waitKey(1) & 0xFF == ord('q'):

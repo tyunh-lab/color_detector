@@ -27,16 +27,16 @@ def enemy_ditect(frame, hsv_image):
     # 自陣のゴールによって分ける必要があり
     # 2つ以上のcontourがある場合は敵がいると判断
     # また、アスペクト比が4以下も敵がいると判断
-    if(len(blue_goal_contours) > 2):
-        print("enemy is detected")
-    elif(b_w/b_h <= 4):
-        print("enemy is detected")
-    else:
-        print("goal is open")
+    # if(len(blue_goal_contours) > 2):
+    #     print("enemy is detected")
+    # elif(b_w/b_h <= 4):
+    #     print("enemy is detected")
+    # else:
+    #     print("goal is open")
 
-    if(len(yellow_goal_contours) > 2):
-        print("enemy is detected")
-    elif(y_w/y_h <= 4):
-        print("enemy is detected")
-    else:
-        print("goal is open")
+    # if(len(yellow_goal_contours) > 2):
+    #     print("enemy is detected")
+    # elif(y_w/y_h <= 4):
+    #     print("enemy is detected")
+    # else:
+    #     print("goal is open")
