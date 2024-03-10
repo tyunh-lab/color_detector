@@ -3,7 +3,7 @@ import serial
 
 import time
 
-from firebase_manager import pushData
+from util.firebase_manager import pushData
 
 def uart():
     ser = serial.Serial('/dev/ttyS0', 115200, timeout=2)
