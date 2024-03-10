@@ -18,3 +18,9 @@ sudo pip install gattlib
 
 # psutil のインストール
 pip install psutil 
+
+# firebaseのインストール
+pip3 install --upgrade firebase-admin
+
+# serialのインストール
+pip3 install pyserial
