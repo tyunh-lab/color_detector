@@ -6,9 +6,18 @@ from ditector.goal_ditect import blue_goal_ditect, yellow_goal_ditect
 
 from ditector.enemy import enemy_ditect
 
-def all_ditect(cap, withGUI=False):
-    frame_length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    start = time.time()
+from util.firebase_manager import pushVido
+
+def all_ditect(cap, withGUI=False, withSaveVideo=False):
+    # 動画の保存
+    if withSaveVideo:
+        # 動画の保存設定mp4
+        fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+        fps = int(cap.get(cv2.CAP_PROP_FPS))
+        frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        out = cv2.VideoWriter('output.mp4', fourcc, fps, (frame_width, frame_height))
+
     while (cap.isOpened()):
     # 1フレーム毎　読込み
         _, frame = cap.read()
@@ -18,7 +27,7 @@ def all_ditect(cap, withGUI=False):
             break
 
         # ブラー処理
-        blured_frame = cv2.GaussianBlur(frame, (111, 111), 0) # <-奇数にしないといけない、値を大きくすると重くなる
+        blured_frame = cv2.GaussianBlur(frame, (33, 33), 0) # <-奇数にしないといけない、値を大きくすると重くなる
 
         # 画像をHSVに変換
         hsv_image = cv2.cvtColor(blured_frame, cv2.COLOR_BGR2HSV)
@@ -110,6 +119,10 @@ def all_ditect(cap, withGUI=False):
             # GUIに表示
             cv2.imshow("Camera", frame)
         
+        if withSaveVideo:
+            # 動画の保存
+            out.write(frame)
+        
         # qキーが押されたら途中終了
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -117,7 +130,11 @@ def all_ditect(cap, withGUI=False):
     # print("elapsed_time:{0}".format(time.time() - start) + "[sec]")
     # print("frame_length:{0}".format(frame_length))
     # print("fps:{0}".format(frame_length / (time.time() - start)))
-
+        
+    if withSaveVideo:
+        out.release()
+        pushVido()
+    
     # 終了処理
     cap.release()
     cv2.destroyAllWindows()
