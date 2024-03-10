@@ -6,6 +6,8 @@ from ditector.goal_ditect import blue, yellow
 from ditector.all_ditector import all_ditect
 from ditector.line_ditector import line
 
+from util.uart import uart
+
 import os
 
 from util.json_manager import setup_json, write_json_overwrite
@@ -28,7 +30,9 @@ def main():
 if __name__ == "__main__":
     setup_json()
     thread1 = threading.Thread(target=logger.logger)
+    thread2 = threading.Thread(target=uart)
     thread1.start()
+    thread2.start()
     # thread1.join() #<-終わるまで次に進まない
     main()
 
