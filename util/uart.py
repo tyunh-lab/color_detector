@@ -1,6 +1,8 @@
 import datetime
 import serial
 
+import time
+
 from firebase_manager import pushData
 
 ser = serial.Serial('/dev/ttyS0', 115200, timeout=2)
@@ -23,3 +25,4 @@ while True:
         u'motor3': motor3,
         u'time': datetime.datetime.now()
     })
+    time.sleep(1)
