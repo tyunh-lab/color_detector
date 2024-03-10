@@ -8,15 +8,9 @@ cred = credentials.Certificate('serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-def setTemp(Temp=25, Hum=55, Pres=1000):
-    Date = datetime.datetime.now()
-    # キーを日付時刻で作成
-    ref = db.collection('Database').document(str(Date))
-    ref.set({
-        u'Pres': Pres,
-        u'Hum': Hum,
-        u'Temp': Temp,
-    })
+def pushData(data):
+    doc_ref = db.collection('Database').document(str(datetime.datetime.now()))
+    doc_ref.set(data)
 
 maxLength = 20
 
@@ -35,7 +29,3 @@ def resizeDatabase():
 
 def deleteDoc(id):
     db.collection('Database').document(id).delete()
-
-if __name__ == '__main__':
-    setTemp()
-    resizeDatabase()
