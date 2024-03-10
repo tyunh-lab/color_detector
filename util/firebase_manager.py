@@ -9,7 +9,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 def pushData(data):
-    doc_ref = db.collection('Database').document(str(datetime.datetime.now()))
+    doc_ref = db.collection('Database').document('status')
     doc_ref.set(data)
 
 maxLength = 20
