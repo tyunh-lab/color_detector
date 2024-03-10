@@ -8,8 +8,6 @@ from ditector.line_ditector import line
 
 from util.uart import uart
 
-import os
-
 from util.json_manager import setup_json, write_json_overwrite
 
 import logger
@@ -17,14 +15,14 @@ import logger
 dir_path = "video"
 
 def main():
-    # write_json_overwrite({'status': 'now', 'now_task': 'all_ditect', 'video_path': 'camera'})
-    # cap = cv2.VideoCapture(0)
-    # all_ditect(cap, withGUI=True)
-    video_paths = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
-    for video_path in video_paths:
-        write_json_overwrite({'status': 'now', 'now_task': 'all_ditect', 'video_path': f'{video_path}'})
-        cap = cv2.VideoCapture(f'{dir_path}/{video_path}')
-        all_ditect(cap)
+    write_json_overwrite({'status': 'now', 'now_task': 'all_ditect', 'video_path': 'camera'})
+    cap = cv2.VideoCapture(0)
+    all_ditect(cap, withGUI=True, withSaveVideo=True)
+    # video_paths = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
+    # for video_path in video_paths:
+    #     write_json_overwrite({'status': 'now', 'now_task': 'all_ditect', 'video_path': f'{video_path}'})
+    #     cap = cv2.VideoCapture(f'{dir_path}/{video_path}')
+    #     all_ditect(cap)
     write_json_overwrite({'status': 'done', 'now_task': 'none'})
 
 if __name__ == "__main__":
