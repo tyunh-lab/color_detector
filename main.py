@@ -15,6 +15,9 @@ import logger
 dir_path = "video"
 
 def main():
+    # write_json_overwrite({'status': 'now', 'now_task': 'all_ditect', 'video_path': 'camera'})
+    # cap = cv2.VideoCapture(0)
+    # all_ditect(cap, withGUI=True)
     video_paths = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
     for video_path in video_paths:
         write_json_overwrite({'status': 'now', 'now_task': 'all_ditect', 'video_path': f'{video_path}'})
