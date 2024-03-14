@@ -3,7 +3,7 @@ import numpy as np
 
 def ball_ditect(frame,hsv_image):
     # オレンジ色のHSV範囲を指定
-    lower_orange = np.array([0, 125, 200])  # 下限値
+    lower_orange = np.array([0, 80, 100])  # 下限値
     upper_orange = np.array([20, 230, 255])  # 上限値
 
     # 指定した範囲内のピクセルを抽出
