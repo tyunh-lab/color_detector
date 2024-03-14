@@ -1,33 +1,52 @@
 import cv2
-import time
+from picamera2 import PiCamera2
 import numpy as np
 from ditector.ball_ditect import ball_ditect
 from ditector.goal_ditect import blue_goal_ditect, yellow_goal_ditect
 
-from ditector.enemy import enemy_ditect
-
 from util.firebase_manager import pushVido
 
-def all_ditect(cap, withGUI=False, withSaveVideo=False):
+def all_ditect(withGUI=False, withSaveVideo=False):
+    # picameraの設定
+    camera = PiCamera2()
+    camera.configure(camera.create_preview_configuration(main={"format":'XRGB8888',"size":(1920,1920)}))
+    camera.start()
+    # 画像を取得
+    image = camera.capture_array()
+    #画像が3次元配列でない場合、3次元配列に変換
+    channels = 1 if len(image.shape) == 2 else image.shape[2]
+    if channels == 1:
+        image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+    if channels == 4:
+        image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
+
+    frame = image
+
     # 動画の保存
     if withSaveVideo:
         # 動画の保存設定mp4
         fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        fps = int(cap.get(cv2.CAP_PROP_FPS))
-        frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = 30
+        frame_width = int(frame.shape[1])
+        frame_height = int(frame.shape[0])
         out = cv2.VideoWriter('output.mp4', fourcc, fps, (frame_width, frame_height))
-
-    while (cap.isOpened()):
-    # 1フレーム毎　読込み
-        _, frame = cap.read()
+    
+    while (True):
+        # 1フレーム毎　読込み
+        frame = camera.capture_array()
+        # 画像が3次元配列でない場合、3次元配列に変換
+        channels = 1 if len(frame.shape) == 2 else frame.shape[2]
+        if channels == 1:
+            frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+        if channels == 4:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
 
         # フレームがない場合終了
         if (frame is None):
             break
 
         # ブラー処理
-        blured_frame = cv2.GaussianBlur(frame, (33, 33), 0) # <-奇数にしないといけない、値を大きくすると重くなる
+        blured_frame = cv2.GaussianBlur(frame, (111, 111), 0) # <-奇数にしないといけない、値を大きくすると重くなる
 
         # 画像をHSVに変換
         hsv_image = cv2.cvtColor(blured_frame, cv2.COLOR_BGR2HSV)
@@ -43,7 +62,8 @@ def all_ditect(cap, withGUI=False, withSaveVideo=False):
         yellow_goal_contours = [cnt for cnt in yellow_goal_contours if cv2.contourArea(cnt) > 1000]
         
         #for debug
-        enemy_ditect(frame, hsv_image)
+        # enemy_ditect(frame, hsv_image)
+        
         # ボールの検出
         for i in range(len(ball_contours)):
             (x,y), radius = cv2.minEnclosingCircle(ball_contours[i])
@@ -133,8 +153,7 @@ def all_ditect(cap, withGUI=False, withSaveVideo=False):
         
     if withSaveVideo:
         out.release()
-        pushVido()
+        # pushVido()
     
     # 終了処理
-    cap.release()
     cv2.destroyAllWindows()
