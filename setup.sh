@@ -24,3 +24,5 @@ pip3 install --upgrade firebase-admin
 
 # serialのインストール
 pip3 install pyserial
+
+sudo apt install -y python3-picamera2
