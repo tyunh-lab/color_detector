@@ -1,5 +1,7 @@
 import cv2
-from picamera2 import PiCamera2
+from picamera2 import Picamera2
+# from picamera2 import controls
+from libcamera import controls
 import numpy as np
 from ditector.ball_ditect import ball_ditect
 from ditector.goal_ditect import blue_goal_ditect, yellow_goal_ditect
@@ -11,6 +13,7 @@ def all_ditect(withGUI=False, withSaveVideo=False):
     camera = PiCamera2()
     camera.configure(camera.create_preview_configuration(main={"format":'XRGB8888',"size":(1920,1920)}))
     camera.start()
+    camera.set_controls({'AfMode': controls.AfModeEnum.Continuous})
     # 画像を取得
     image = camera.capture_array()
     #画像が3次元配列でない場合、3次元配列に変換
@@ -69,7 +72,7 @@ def all_ditect(withGUI=False, withSaveVideo=False):
             (x,y), radius = cv2.minEnclosingCircle(ball_contours[i])
             center = (int(x),int(y))
 
-            if withGUI:
+            if withGUI or withSaveVideo:
                 # ボールの中心を表示
                 frame = cv2.circle(frame,center,5,(0,0,255),-1)
                 # 中心から線を表示
@@ -96,7 +99,7 @@ def all_ditect(withGUI=False, withSaveVideo=False):
             x = rect[0][0]
             y = rect[0][1]
 
-            if withGUI:
+            if withGUI or withSaveVideo:
                 # ゴールの枠を表示
                 # frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 frame = cv2.drawContours(frame,[box],0,(0,255,0),2)
@@ -122,7 +125,7 @@ def all_ditect(withGUI=False, withSaveVideo=False):
             x = rect[0][0]
             y = rect[0][1]
 
-            if withGUI:
+            if withGUI or withSaveVideo:
                 # ゴールの枠を表示
                 # frame = cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 frame = cv2.drawContours(frame,[box],0,(0,255,0),2)
