@@ -6,7 +6,9 @@ import numpy as np
 from ditector.ball_ditect import ball_ditect
 from ditector.goal_ditect import blue_goal_ditect, yellow_goal_ditect
 
-from util.firebase_manager import pushVido
+import math
+
+from util.uart import uart, writewords
 
 def all_ditect(withGUI=False, withSaveVideo=False):
     # picameraの設定
@@ -71,6 +73,8 @@ def all_ditect(withGUI=False, withSaveVideo=False):
         for i in range(len(ball_contours)):
             (x,y), radius = cv2.minEnclosingCircle(ball_contours[i])
             center = (int(x),int(y))
+            ball_angle = math.atan2(x - frame.shape[1]/2, y - frame.shape[0]/2) * 180 / math.pi
+            writewords(f'{ball_angle},{radius}')
 
             if withGUI or withSaveVideo:
                 # ボールの中心を表示
