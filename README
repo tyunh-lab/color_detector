@@ -1,0 +1,8 @@
+setup
+
+/boot/config.txt
+dtoverlay=imx219
+enable_uart=1
+over_voltage=4
+arm_freq=1300
+core_freq=500
