@@ -3,10 +3,7 @@ import numpy as np
 
 def blue_goal_ditect(frame,hsv_image):
     # 青色のHSV範囲を指定
-    # lower_blue = np.array([100, 100, 80])  # 下限値
-    # upper_blue = np.array([200, 255, 255])  # 上限値
-    
-    lower_blue = np.array([100, 80, 60])  # 下限値
+    lower_blue = np.array([100, 100, 100])  # 下限値
     upper_blue = np.array([200, 255, 255])  # 上限値
 
     # 指定した範囲内のピクセルを抽出
@@ -22,8 +19,8 @@ def blue_goal_ditect(frame,hsv_image):
 
 def yellow_goal_ditect(frame,hsv_image):
     # 黄色のHSV範囲を指定
-    lower_yellow = np.array([20, 100, 100])  # 下限値
-    upper_yellow = np.array([40, 255, 255])  # 上限値
+    lower_yellow = np.array([15, 80, 80])  # 下限値
+    upper_yellow = np.array([35, 255, 255])  # 上限値
 
     # 指定した範囲内のピクセルを抽出
     yellow_mask = cv2.inRange(hsv_image, lower_yellow, upper_yellow)

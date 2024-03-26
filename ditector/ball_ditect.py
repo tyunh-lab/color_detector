@@ -1,10 +1,10 @@
-import cv2 
+import cv2
 import numpy as np
 
 def ball_ditect(frame,hsv_image):
     # オレンジ色のHSV範囲を指定
-    lower_orange = np.array([0, 80, 100])  # 下限値
-    upper_orange = np.array([20, 230, 255])  # 上限値
+    lower_orange = np.array([0, 100, 100])  # 下限値
+    upper_orange = np.array([20, 255, 255])  # 上限値
 
     # 指定した範囲内のピクセルを抽出
     orange_mask = cv2.inRange(hsv_image, lower_orange, upper_orange)
@@ -64,7 +64,6 @@ def ball(cap, withGUI=False):
             # print("x: ", f"{x:.2f}", "y: ", f"{y:.2f}", "radius: ", f"{radius:.2f}",)
             # 中心からのx,yの距離
             # print("x: ", f"{(x - frame.shape[1]/2):.2f}", "y: ", f"{(y - frame.shape[0]/2):.2f}", "radius: ", f"{radius:.2f}",)
-
             if withGUI:
                 # ボールの中心を表示
                 frame = cv2.circle(frame,center,5,(0,0,255),-1)
