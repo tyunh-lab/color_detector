@@ -1,8 +1,13 @@
 #opencvのインストール
 sudo apt install -y libatlas-base-dev
+
+# pipのインストール
+sudo apt install python3-pip
+
 # 依存パッケージのインストール
 sudo apt install -y libavutil56 libcairo-gobject2 libgtk-3-0 libqtgui4 libpango-1.0-0 libqtcore4 libavcodec58 libcairo2 libswscale5 libtiff5 libqt4-test libatk1.0-0 libavformat58 libgdk-pixbuf2.0-0 libilmbase23 libjasper1 libopenexr23 libpangocairo-1.0-0 libwebp6
 sudo pip3 install opencv-python==4.1.0.25
+sudo apt install libgl1-mesa-glx
 
 # pyBluez の依存パッケージをインストール
 sudo apt-get install -y python-dev libbluetooth3-dev
